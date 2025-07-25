@@ -1,0 +1,5 @@
+match a {
+ case 13 {}
+ case 14 -> io.println('Hello, world!')
+ default {}
+}

@@ -207,6 +207,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "native_statement",
           "named": true
         },
@@ -843,6 +847,10 @@
         },
         {
           "type": "import_statement",
+          "named": true
+        },
+        {
+          "type": "match_expr",
           "named": true
         },
         {

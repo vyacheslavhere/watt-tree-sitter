@@ -109,6 +109,10 @@
         {
           "type": "SYMBOL",
           "name": "define_variable"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "match_expr"
         }
       ]
     },
@@ -410,6 +414,10 @@
         {
           "type": "SYMBOL",
           "name": "function_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "match_expr"
         }
       ]
     },
@@ -1147,6 +1155,10 @@
             "name": "_expression"
           },
           {
+            "type": "STRING",
+            "value": "{"
+          },
+          {
             "type": "REPEAT",
             "content": {
               "type": "SEQ",
@@ -1185,47 +1197,39 @@
             }
           },
           {
-            "type": "CHOICE",
+            "type": "SEQ",
             "members": [
               {
-                "type": "SEQ",
+                "type": "STRING",
+                "value": "default"
+              },
+              {
+                "type": "CHOICE",
                 "members": [
                   {
-                    "type": "STRING",
-                    "value": "default"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_expression"
-                  },
-                  {
-                    "type": "CHOICE",
+                    "type": "SEQ",
                     "members": [
                       {
-                        "type": "SEQ",
-                        "members": [
-                          {
-                            "type": "STRING",
-                            "value": "->"
-                          },
-                          {
-                            "type": "SYMBOL",
-                            "name": "_expression"
-                          }
-                        ]
+                        "type": "STRING",
+                        "value": "->"
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "block"
+                        "name": "_expression"
                       }
                     ]
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "block"
                   }
                 ]
-              },
-              {
-                "type": "BLANK"
               }
             ]
+          },
+          {
+            "type": "STRING",
+            "value": "}"
           }
         ]
       }

@@ -11,7 +11,7 @@ module.exports = grammar({
       token(
         choice(
           seq("/*", repeat(choice(/[^*]/, /\*[^/]/)), "*/"),
-          seq("//", /[^\n]*/)
+          seq("//", /[^\n]*/),
         ),
       ),
 
@@ -28,7 +28,8 @@ module.exports = grammar({
         $.trait_definition,
         $.native_statement,
         $.assign_variable,
-        $.define_variable
+        $.define_variable,
+        $.match_expr,
       ),
 
     function_definition: ($) =>
@@ -44,7 +45,7 @@ module.exports = grammar({
         $.identifier,
         optional($.parameter_list),
         optional(seq("impl", sepByComma($.identifier))),
-        optional($.block)
+        optional($.block),
       ),
 
     unit_definition: ($) => seq("unit", $.identifier, optional($.block)),
@@ -65,7 +66,8 @@ module.exports = grammar({
         $.native_statement,
         $.assign_variable,
         $.define_variable,
-        $.function_definition
+        $.function_definition,
+        $.match_expr,
       ),
 
     assign_variable: ($) =>
@@ -79,7 +81,7 @@ module.exports = grammar({
         $._expression,
         $.block,
         repeat($.elif_statement),
-        optional($.else_statement)
+        optional($.else_statement),
       ),
 
     elif_statement: ($) => seq("elif", $._expression, $.block),
@@ -112,7 +114,7 @@ module.exports = grammar({
         $.atom_expr,
         $.postfix_expr,
         $.object_creation,
-        $.match_expr
+        $.match_expr,
       ),
 
     binary_expr: ($) =>
@@ -121,7 +123,7 @@ module.exports = grammar({
         prec.left(2, seq($._expression, choice("!=", "=="), $._expression)),
         prec.left(
           3,
-          seq($._expression, choice(">", "<", ">=", "<="), $._expression)
+          seq($._expression, choice(">", "<", ">=", "<="), $._expression),
         ),
         prec.left(4, seq($._expression, "..", $._expression)),
         prec.left(5, seq($._expression, "impls", $._expression)),
@@ -141,8 +143,8 @@ module.exports = grammar({
           $.identifier,
           seq($.postfix_expr, ".", $.identifier),
           seq($.postfix_expr, $.args),
-          seq($.postfix_expr, $.args, "?")
-        )
+          seq($.postfix_expr, $.args, "?"),
+        ),
       ),
 
     args: ($) => seq("(", sepByComma($._expression), ")"),
@@ -154,21 +156,17 @@ module.exports = grammar({
         seq(
           "match",
           $._expression,
+          "{",
           repeat(
             seq(
               "case",
               $._expression,
-              choice(seq("->", $._expression), $.block)
-            )
+              choice(seq("->", $._expression), $.block),
+            ),
           ),
-          optional(
-            seq(
-              "default",
-              $._expression,
-              choice(seq("->", $._expression), $.block)
-            )
-          )
-        )
+          seq("default", choice(seq("->", $._expression), $.block)),
+          "}",
+        ),
       ),
 
     lambda_expr: ($) =>
